@@ -49,4 +49,8 @@ public class PropostaForm {
     public Proposta toModel() {
         return new Proposta(this.documento,this.nome,this.endereco,this.salario);
     }
+
+    public boolean isUnique(PropostaRepository propostaRepository) {
+        return propostaRepository.findByDocumento(this.documento).isEmpty();
+    }
 }

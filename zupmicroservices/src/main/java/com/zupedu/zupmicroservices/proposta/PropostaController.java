@@ -1,5 +1,7 @@
 package com.zupedu.zupmicroservices.proposta;
 
+import com.zupedu.zupmicroservices.validators.handlers.ValidationErrorsOutputDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,9 @@ public class PropostaController {
 
     @PostMapping
     public ResponseEntity addProposta(@Valid @RequestBody PropostaForm propostaForm, HttpServletRequest request){
+        if(!propostaForm.isUnique(propostaRepository)){
+            return ResponseEntity.status(HttpStatus.valueOf(422)).body(new ValidationErrorsOutputDto("documento","Só pode haver uma proposta por Documento!"));
+        }
         Proposta proposta = propostaForm.toModel();
         propostaRepository.save(proposta);
         URI uriRetorno = URI.create(request.getRequestURI().toString()+"/"+proposta.getId());
