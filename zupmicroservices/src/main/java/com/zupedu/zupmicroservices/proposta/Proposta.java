@@ -1,0 +1,44 @@
+package com.zupedu.zupmicroservices.proposta;
+
+import com.zupedu.zupmicroservices.validators.annotations.CpfOuCnpj;
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
+
+@Entity
+public class Proposta {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotBlank @Length(min = 11, max = 13)
+    @CpfOuCnpj
+    private String documento;
+    @NotBlank
+    private String nome;
+    @NotBlank
+    private String endereco;
+    @Positive
+    private BigDecimal salario;
+
+    @Deprecated
+    public Proposta() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Proposta(@NotBlank String documento, @NotBlank String nome, @NotBlank String endereco, @Positive BigDecimal salario) {
+        this.documento = documento;
+        this.nome = nome;
+        this.endereco = endereco;
+        this.salario = salario;
+    }
+}
