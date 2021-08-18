@@ -4,7 +4,6 @@ import com.zupedu.zupmicroservices.validators.annotations.CpfOuCnpj;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
@@ -25,6 +24,7 @@ public class Proposta {
     private BigDecimal salario;
     @Enumerated(EnumType.STRING)
     private Status status;
+    private String cartao;
 
     @Deprecated
     public Proposta() {
@@ -55,5 +55,13 @@ public class Proposta {
         this.nome = nome;
         this.endereco = endereco;
         this.salario = salario;
+    }
+
+    public void setCartao(String cartao) {
+        this.cartao = cartao;
+    }
+
+    public SolicitacaoAnaliseForm toAnaliseForm(){
+        return new SolicitacaoAnaliseForm(this.documento,this.nome,this.id.toString());
     }
 }
