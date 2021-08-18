@@ -3,10 +3,7 @@ package com.zupedu.zupmicroservices.proposta;
 import com.zupedu.zupmicroservices.validators.annotations.CpfOuCnpj;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -26,9 +23,27 @@ public class Proposta {
     private String endereco;
     @Positive
     private BigDecimal salario;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @Deprecated
     public Proposta() {
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public Long getId() {
