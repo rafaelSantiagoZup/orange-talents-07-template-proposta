@@ -1,39 +1,40 @@
 package com.zupedu.zupmicroservices.cartao;
 
 import com.zupedu.zupmicroservices.proposta.Proposta;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.stereotype.Service;
+import com.zupedu.zupmicroservices.proposta.PropostaRepository;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ExecutionException;
+import javax.transaction.Transactional;
+import java.util.List;
 
-@Service
+@Component
 public class CartaoServiceAsync {
 
-    @Value("${tempo.espera.thread}")
-    private Integer milisegundos;
 
     private final CartaoClient cartaoClient;
+    private final PropostaRepository propostaRepository;
 
-    public CartaoServiceAsync(CartaoClient cartaoClient) {
+    public CartaoServiceAsync(CartaoClient cartaoClient, PropostaRepository propostaRepository) {
         this.cartaoClient = cartaoClient;
+        this.propostaRepository = propostaRepository;
     }
 
-    @Async
-    public String addCartaoAsync(Proposta proposta) throws InterruptedException {
-        System.out.println("Execute method asynchronously - "
-                + Thread.currentThread().getName());
-        AsyncResult<String> numero = new AsyncResult<String>(cartaoClient.addCartao(proposta.toAnaliseForm()).getId());
-        String valor = "";
-        try{
-            System.out.println(milisegundos);
-            Thread.sleep(milisegundos);
-            valor = numero.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return valor;
+    @Scheduled(fixedDelayString = "${tempo.espera.thread}")
+    @Transactional
+    public void addCartaoAsync() {
+
+        List<Proposta> propostas = propostaRepository.findAll();
+        propostas.stream().forEach(proposta->{
+            if(!proposta.pussuiCartao()){
+                String cartao = cartaoClient.addCartao(proposta.toAnaliseForm()).getId();
+                proposta.setCartao(cartao);
+                propostaRepository.save(proposta);
+            }
+        });
+
+
+
     }
 
 }

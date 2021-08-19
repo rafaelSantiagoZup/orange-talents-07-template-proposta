@@ -56,6 +56,27 @@ public class Proposta {
         this.endereco = endereco;
         this.salario = salario;
     }
+    public boolean pussuiCartao(){
+        if(this.cartao != null){
+            return true;
+        }return false;
+    }
+
+    public String escondeNumeroDocumento(){
+        Integer size = this.documento.length();
+        String retorno = "";
+        for(int i = 0;i<size-3;i++){
+            retorno+="*";
+        }
+        for(int j=size-3;j<size;j++){
+            retorno+= this.documento.charAt(j);
+        }
+        return retorno;
+    }
+
+    public PropostaDto toPropostaDto(){
+        return new PropostaDto(escondeNumeroDocumento(),this.nome,this.endereco,this.status,pussuiCartao());
+    }
 
     public void setCartao(String cartao) {
         this.cartao = cartao;

@@ -13,7 +13,6 @@ import java.util.concurrent.Executor;
 @SpringBootApplication
 @EnableFeignClients
 @EnableScheduling
-@EnableAsync
 public class ZupmicroservicesApplication {
 
 	public static void main(String[] args) {
