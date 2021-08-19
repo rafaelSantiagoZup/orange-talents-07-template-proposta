@@ -1,7 +1,6 @@
 package com.zupedu.zupmicroservices.proposta;
 
 import com.zupedu.zupmicroservices.cartao.CartaoClient;
-import com.zupedu.zupmicroservices.cartao.CartaoServiceAsync;
 import com.zupedu.zupmicroservices.validators.handlers.ValidationErrorsOutputDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class PropostaController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity addProposta(@Valid @RequestBody PropostaForm propostaForm, HttpServletRequest request) throws InterruptedException, ExecutionException {
+    public ResponseEntity addProposta(@Valid @RequestBody PropostaForm propostaForm, HttpServletRequest request) {
 
         if(!propostaForm.isUnique(propostaRepository)){
             return ResponseEntity.status(HttpStatus.valueOf(422)).body(new ValidationErrorsOutputDto
