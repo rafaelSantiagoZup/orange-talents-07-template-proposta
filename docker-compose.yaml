@@ -50,7 +50,7 @@ services:
     image: jboss/keycloak:11.0.0
     ports:
       - 18443:8443
-      - 18080:8080
+      - 18085:8080
       - 19990:9990
     depends_on:
       # Just a delay to wait for postgres! This is not recommended!

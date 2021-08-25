@@ -1,6 +1,5 @@
 package com.zupedu.zupmicroservices.biometria;
 
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
