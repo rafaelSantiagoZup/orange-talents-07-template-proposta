@@ -1,6 +1,7 @@
 package com.zupedu.zupmicroservices.proposta;
 
 import com.zupedu.zupmicroservices.cartao.CartaoClient;
+import com.zupedu.zupmicroservices.configuration.MinhasMetricas;
 import com.zupedu.zupmicroservices.validators.handlers.ValidationErrorsOutputDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/proposta")
@@ -19,10 +19,12 @@ public class PropostaController {
 
     private final PropostaRepository propostaRepository;
     private final StatusClient statusClient;
+    private final MinhasMetricas minhasMetricas;
 
-    public PropostaController(PropostaRepository propostaRepository, StatusClient statusClient, CartaoClient cartaoClient) {
+    public PropostaController(PropostaRepository propostaRepository, StatusClient statusClient, CartaoClient cartaoClient, MinhasMetricas minhasMetricas) {
         this.propostaRepository = propostaRepository;
         this.statusClient = statusClient;
+        this.minhasMetricas = minhasMetricas;
     }
 
 
@@ -48,12 +50,14 @@ public class PropostaController {
         }
 
         URI uriRetorno = URI.create(request.getRequestURI().toString()+"/"+proposta.getId());
+        minhasMetricas.meuContadorPropostas(proposta.getId(), proposta.getStatus().toString());
         return ResponseEntity.created(uriRetorno).build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PropostaDto> getProposta(@PathVariable Long id){
         Optional<Proposta> proposta = propostaRepository.findById(id);
+        minhasMetricas.timerReqPropostas(id,propostaRepository);
         return ResponseEntity.ok().body(proposta.get().toPropostaDto());
     }
 }
