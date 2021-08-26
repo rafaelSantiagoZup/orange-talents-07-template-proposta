@@ -85,4 +85,8 @@ public class Proposta {
     public SolicitacaoAnaliseForm toAnaliseForm(){
         return new SolicitacaoAnaliseForm(this.documento,this.nome,this.id.toString());
     }
+
+    public Status getStatus() {
+        return status;
+    }
 }

@@ -2,6 +2,7 @@ package com.zupedu.zupmicroservices.cartao;
 
 import com.zupedu.zupmicroservices.proposta.Proposta;
 import com.zupedu.zupmicroservices.proposta.PropostaRepository;
+import com.zupedu.zupmicroservices.proposta.Status;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,7 @@ public class CartaoServiceAsync {
 
         List<Proposta> propostas = propostaRepository.findAll();
         propostas.stream().forEach(proposta->{
-            if(!proposta.pussuiCartao()){
+            if(!proposta.pussuiCartao() && proposta.getStatus()== Status.ELEGIVEL){
                 String cartao = cartaoClient.addCartao(proposta.toAnaliseForm()).getId();
                 proposta.setCartao(cartao);
                 propostaRepository.save(proposta);

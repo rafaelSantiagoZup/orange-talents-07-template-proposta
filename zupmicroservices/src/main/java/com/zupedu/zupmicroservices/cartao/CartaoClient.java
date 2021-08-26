@@ -16,4 +16,7 @@ public interface CartaoClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/cartoes/{cartaoId}" )
     Cartao getCartao(@PathVariable("cartaoId") String cartaoId);
+
+    @RequestMapping(method = RequestMethod.POST, value = "/cartoes/{cartaoId}/bloqueios" )
+    RespostaBloqueioForm bloqueiaCartao(@PathVariable("cartaoId") String cartaoId,ReqBloqueioForm bloqueioForm);
 }
