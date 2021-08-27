@@ -1,6 +1,7 @@
 package com.zupedu.zupmicroservices.cartao;
 
 import com.zupedu.zupmicroservices.proposta.SolicitacaoAnaliseForm;
+import com.zupedu.zupmicroservices.viagem.ViagemReqForm;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,4 +20,7 @@ public interface CartaoClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "/cartoes/{cartaoId}/bloqueios" )
     RespostaBloqueioForm bloqueiaCartao(@PathVariable("cartaoId") String cartaoId,ReqBloqueioForm bloqueioForm);
+
+    @RequestMapping(method = RequestMethod.POST, value = "/cartoes/{cartaoId}/avisos" )
+    RespostaBloqueioForm avisaViagem(@PathVariable("cartaoId") String cartaoId, ViagemReqForm viagemReqForm);
 }
