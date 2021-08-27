@@ -5,7 +5,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Paypal implements Carteira{
+public class Samsung implements Carteira{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -18,10 +18,10 @@ public class Paypal implements Carteira{
 
 
     @Deprecated
-    public Paypal() {
+    public Samsung() {
     }
 
-    public Paypal(String cartaoId, String email) {
+    public Samsung(String cartaoId, String email) {
         this.cartaoId = cartaoId;
         this.email = email;
     }
@@ -31,6 +31,7 @@ public class Paypal implements Carteira{
     }
 
     public CarteiraRequest toCarteiraRequest() {
-        return new CarteiraRequest(email,"Paypal");
+        return new CarteiraRequest(email,"Samsung pay");
     }
+
 }
