@@ -1,7 +1,9 @@
 package com.zupedu.zupmicroservices.proposta;
 
+import com.zupedu.zupmicroservices.utils.DocumentsHandler;
 import com.zupedu.zupmicroservices.validators.annotations.CpfOuCnpj;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,12 +11,12 @@ import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 @Entity
-public class Proposta {
+public class Proposta implements DocumentsHandler {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank @Length(min = 11, max = 13)
-    @CpfOuCnpj
+    @NotBlank
+    @Column(length = 255)
     private String documento;
     @NotBlank
     private String nome;
@@ -51,7 +53,7 @@ public class Proposta {
     }
 
     public Proposta(@NotBlank String documento, @NotBlank String nome, @NotBlank String endereco, @Positive BigDecimal salario) {
-        this.documento = documento;
+        this.documento = encriptaDados(documento);
         this.nome = nome;
         this.endereco = endereco;
         this.salario = salario;
@@ -62,20 +64,20 @@ public class Proposta {
         }return false;
     }
 
-    public String escondeNumeroDocumento(){
-        Integer size = this.documento.length();
+    public String escondeNumeroDocumento(String documento){
+        Integer size = documento.length();
         String retorno = "";
         for(int i = 0;i<size-3;i++){
             retorno+="*";
         }
         for(int j=size-3;j<size;j++){
-            retorno+= this.documento.charAt(j);
+            retorno+= documento.charAt(j);
         }
         return retorno;
     }
 
     public PropostaDto toPropostaDto(){
-        return new PropostaDto(escondeNumeroDocumento(),this.nome,this.endereco,this.status,pussuiCartao());
+        return new PropostaDto(this.nome,this.endereco,this.status,pussuiCartao());
     }
 
     public void setCartao(String cartao) {
@@ -88,5 +90,18 @@ public class Proposta {
 
     public Status getStatus() {
         return status;
+    }
+    public String encriptaDados(String documento){
+        BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
+        return bCrypt.encode(documento);
+    }
+
+    @Override
+    public boolean checaDocumento(String documento) {
+        String enc = encriptaDados(documento);
+        if(enc.equals(this.documento)){
+            return true;
+        }
+        return false;
     }
 }

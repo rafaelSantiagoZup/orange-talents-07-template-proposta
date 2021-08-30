@@ -1,14 +1,12 @@
 package com.zupedu.zupmicroservices.proposta;
 
 public class PropostaDto {
-    private String documento;
     private String nome;
     private String endereco;
     private Status status;
     private boolean possuiCartao;
 
-    public PropostaDto(String documento, String nome, String endereco, Status status, boolean possuiCartao) {
-        this.documento = documento;
+    public PropostaDto( String nome, String endereco, Status status, boolean possuiCartao) {
         this.nome = nome;
         this.endereco = endereco;
         this.status = status;
@@ -17,10 +15,6 @@ public class PropostaDto {
 
     @Deprecated
     public PropostaDto() {
-    }
-
-    public String getDocumento() {
-        return documento;
     }
 
     public String getNome() {

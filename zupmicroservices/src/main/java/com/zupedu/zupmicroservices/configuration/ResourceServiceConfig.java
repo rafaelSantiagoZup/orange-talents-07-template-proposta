@@ -22,7 +22,7 @@ public class ResourceServiceConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers(HttpMethod.POST,"/api/viagem/**").hasAuthority("SCOPE_proposta")
                         .antMatchers(HttpMethod.POST,"/api/paypal/**").hasAuthority("SCOPE_proposta")
                         .antMatchers(HttpMethod.POST,"/api/samsung/**").hasAuthority("SCOPE_proposta")
-                        .antMatchers(HttpMethod.GET,"/actuator/**").hasAuthority("SCOPE_proposta")
+                        .antMatchers(HttpMethod.GET,"/actuator/**").permitAll()
                         .anyRequest().authenticated()
         ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
     }
